@@ -533,10 +533,6 @@ class TemplateClimate(TemplateEntity, ClimateEntity, RestoreEntity):
                 self._target_temp = kwargs.get(ATTR_TEMPERATURE)
                 self.async_write_ha_state()
 
-        # set temperature calls can contain a new hvac mode.
-        if operation_mode := kwargs.get(ATTR_HVAC_MODE):
-            await self.async_set_hvac_mode(operation_mode)
-
         if self._set_temperature_script is not None:
             await self._set_temperature_script.async_run(
                 run_variables={
@@ -547,3 +543,7 @@ class TemplateClimate(TemplateEntity, ClimateEntity, RestoreEntity):
                 },
                 context=self._context,
             )
+
+        # set temperature calls can contain a new hvac mode.
+        if operation_mode := kwargs.get(ATTR_HVAC_MODE):
+            await self.async_set_hvac_mode(operation_mode)
